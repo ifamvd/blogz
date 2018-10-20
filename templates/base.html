@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{{title}}</title>
+        <title>Blogz | {{title}}</title>
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
         <style>
             html, body {
                 margin:0;
                 padding:0;
+                width: 100%;
             }
             .error {
                 color: red;
@@ -16,6 +17,7 @@
             h1 {
                 font-family: 'Playfair Display', serif;
                 text-align: center;
+                margin: 40px auto;
             }
             h2 {
                 font-family: 'Playfair Display', serif;
@@ -70,11 +72,29 @@
                 margin: 30px 50px;
                 text-align:center;
             }
+            .flash-alert {
+                text-align: center;
+                color: #b61f1f;
+                background-color: #ffdbdb;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+            .flash-success {
+                text-align: center;
+                color: #18862b;
+                background-color: #e8ffe8;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
         </style>
     </head>
     <body>
         <p class="nav">
-            <a href="/blog">Main Blog Page</a><a href="/newpost">Add a Blog Entry</a>
+            <a href="/">Home</a>
+            <a href="/blog">All Posts</a>
+            <a href="/newpost">New Post</a>
+            <a href="/login">Login</a>
+            <a href="/logout">Logout</a>
         </p>
 
         {% with messages = get_flashed_messages(with_categories = True) %}
