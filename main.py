@@ -37,9 +37,6 @@ class User(db.Model):
 @app.before_request
 def require_login():
     allowed_routes = ['login', 'blog', 'index', 'signup']
-    # let's check the seesion information
-    print("This is the session:")
-    print(session)
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
@@ -47,6 +44,9 @@ def require_login():
 def login():
     error_u = ''
     error_p = ''
+    session_name = 'guest'
+    if 'username' in session:
+        session_name = session['username']
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -66,10 +66,13 @@ def login():
             error_u = 'Incorrect username.'
             error_p = 'Incorrect password.'
             flash("Incorrect username and password combination.", 'flash-alert')
-    return render_template('login.html', title = "Login", error_u = error_u, error_p = error_p)
+    return render_template('login.html', title = "Login", session = session_name, error_u = error_u, error_p = error_p)
 
 @app.route('/signup', methods = ['POST', 'GET'])
 def signup():
+    session_name = 'guest'
+    if 'username' in session:
+        session_name = session['username']
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -117,15 +120,16 @@ def signup():
                 return redirect('/newpost')
             else:
                 flash("Username already exists. If it is you, please login. Otherwise, choose a different username.", 'flash-alert')
-                return render_template('signup.html', title = 'Signup')
+                return render_template('signup.html', title = 'Signup', session = session_name)
         else:
             return render_template('signup.html',
                 title = 'Signup',
+                session = session_name,
                 username = username,
                 error_u = error_u,
                 error_p = error_p,
                 error_v = error_v)
-    return render_template('signup.html', title = 'Signup')
+    return render_template('signup.html', title = 'Signup', session = session_name)
 
 def check_space(token):
     for i in token:
@@ -141,27 +145,36 @@ def logout():
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
+    session_name = 'guest'
+    if 'username' in session:
+        session_name = session['username']
     users = User.query.order_by(User.username).all()
-    return render_template('index.html', title = 'Blog Users', users = users)
+    return render_template('index.html', title = 'Blog Users', session = session_name, users = users)
 
 @app.route('/blog')
 def blog():
+    session_name = 'guest'
+    if 'username' in session:
+        session_name = session['username']
     blog_id = request.args.get("id")
     username = request.args.get("user")
     if blog_id:
         blog_id = int(blog_id)
         post = Blog.query.filter_by(id = blog_id).first()
-        return render_template('post.html', title = "Blog Entry", blog_title = post.title, blog_body = post.body, username = post.owner.username)
+        return render_template('post.html', title = "Blog Entry", session = session_name, blog_title = post.title, blog_body = post.body, username = post.owner.username)
     elif username:
         owner = User.query.filter_by(username = username).first()
         posts = Blog.query.filter_by(owner = owner).all()
-        return render_template('singleUser.html', title = 'Post by User', posts = posts, user = username)
+        return render_template('singleUser.html', title = 'Post by User', session = session_name, posts = posts, user = username)
     else:
         posts = Blog.query.order_by(Blog.id).all()
-        return render_template('blog.html', title = "List of Blogs", posts = posts)
+        return render_template('blog.html', title = "List of Blogs", session = session_name, posts = posts)
 
 @app.route('/newpost', methods = ['POST', 'GET'])
 def newpost():
+    session_name = 'guest'
+    if 'username' in session:
+        session_name = session['username']
     owner = User.query.filter_by(username = session['username']).first()
     error_t = ''
     error_b = ''
@@ -183,7 +196,7 @@ def newpost():
             flash("Blog entry created.", 'flash-success')
             post_id = new_post.id
             return redirect('/blog?id=' + str(post_id))
-    return render_template('newpost.html', title = 'Create a Post', error_t = error_t, error_b = error_b)
+    return render_template('newpost.html', title = 'Create a Post', session = session_name, error_t = error_t, error_b = error_b)
 
 if __name__ == '__main__':
     app.run()

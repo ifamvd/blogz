@@ -26,8 +26,6 @@
             h2 {
                 font-family: 'Playfair Display', serif;
                 text-align: left;
-                margin-left: 10px;
-                margin-right: 10px;
             }
             h2 a {
                 color: #2a2a2a;
@@ -36,7 +34,6 @@
                 font-family: "Playfair Display", serif;
                 width: 450px;
                 color: #2a2a2a;
-                margin: 10px 10px 10px 10px;
                 height: 150px;
                 font-size: 1em;
             }
@@ -51,26 +48,31 @@
                 color: white;
                 margin: 0 30px 0 30px;
             }
+            .session {
+                text-align: center;
+                margin:0;
+                padding:10px 0 10px 0;
+                font-family: 'Playfair Display', serif;
+                color: #2a2a2a;
+                background-color: #fff200;
+            }
             ul li {
                 font-family: 'Playfair Display', serif;
-                margin-left: 30px;
-                margin-right: 30px;
                 font-size: 1em;
             }
             p {
                 font-family: 'Playfair Display', serif;
-                margin-left: 30px;
-                margin-right: 30px;
             }
             label p {
                 font-family: 'Playfair Display', serif;
-                margin: 0 10px 0 10px;
+            }
+            .author {
+                margin-left:30px;
             }
             input[type=text], input[type=password], input[type=email] {
                 font-family: "Playfair Display", serif;
                 width: 450px;
                 color: #2a2a2a;
-                margin: 10px 10px 10px 10px;
                 font-size: 1em;
             }
             input[type=submit] {
@@ -79,7 +81,7 @@
                 background-color: #2a2a2a;
                 color: #ffffff;
                 font-size: 1em;
-                margin: 30px 50px;
+                margin: 20px 0;
                 text-align:center;
             }
             .flash-alert {
@@ -88,6 +90,8 @@
                 background-color: #ffdbdb;
                 padding-top: 15px;
                 padding-bottom: 15px;
+                margin-left: 30px;
+                margin-right: 30px;
             }
             .flash-success {
                 text-align: center;
@@ -95,6 +99,8 @@
                 background-color: #e8ffe8;
                 padding-top: 15px;
                 padding-bottom: 15px;
+                margin-left: 30px;
+                margin-right: 30px;
             }
         </style>
     </head>
@@ -105,6 +111,9 @@
             <a href="/newpost">New Post</a>
             <a href="/login">Login</a>
             <a href="/logout">Logout</a>
+        </p>
+        <p class="session">
+            Hello, <strong>{{session}}</strong>!
         </p>
 
         {% with messages = get_flashed_messages(with_categories = True) %}

@@ -13,8 +13,8 @@
         {% for post in posts %}
 
         <h2><a href="/blog?id={{post.id}}">{{post.title}}</a></h2>
-        <p>{{post.body}}</p>
-        <p>Written by <a href="/blog?user={{post.owner.username}}">{{post.owner.username}}</a></p>
+        <p>{{post.body[:250]}} ...<a href="/blog?id={{post.id}}">(read more)</a></p>
+        <p class="author">Written by <a href="/blog?user={{post.owner.username}}">{{post.owner.username}}</a></p>
 
         {% endfor %}
 
