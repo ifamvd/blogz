@@ -83,7 +83,7 @@ def signup():
             flash("You left Username blank.", 'flash-alert')
             username = ''
         elif len(username) < 3 or len(username) > 50:
-            error_u = 'Invalid length: either less than 3 or more than 20.'
+            error_u = 'Invalid length: either less than 3 or more than 50.'
             flash("Username has invalid length.", 'flash-alert')
             username = ''
         elif check_space(username):
@@ -94,7 +94,7 @@ def signup():
             error_p = 'You left this blank. Please type in a valid password.'
             flash("You left Password blank.", 'flash-alert')
         elif len(password) < 3 or len(password) > 50:
-            error_p = 'Invalid length: either less than 3 or more than 20.'
+            error_p = 'Invalid length: either less than 3 or more than 50.'
             flash("Password has invalid length.", 'flash-alert')
         elif check_space(password):
             error_p = 'Space character(s) found. Omit space(s).'
@@ -139,33 +139,26 @@ def logout():
     flash("You have successfully logged out.", 'flash-success')
     return redirect('/blog')
 
-#####
 @app.route('/', methods = ['POST', 'GET'])
 def index():
-    """
-    owner = User.query.filter_by(email = session['email']).first()
-    if request.method == 'POST':
-        task_name = request.form['task']
-        new_task = Task(task_name, owner)
-        db.session.add(new_task)
-        db.session.commit()
-    tasks = Task.query.filter_by(completed = False, owner = owner).all()
-    completed_tasks = Task.query.filter_by(completed = True, owner = owner).all()
-    return render_template('todos.html', tasks = tasks, completed_tasks = completed_tasks, title = 'Get It Done!')
-    """
-    return render_template('base.html')
-#####
+    users = User.query.order_by(User.username).all()
+    return render_template('index.html', title = 'Blog Users', users = users)
 
 @app.route('/blog')
 def blog():
     blog_id = request.args.get("id")
-    if not blog_id:
-        posts = Blog.query.order_by(Blog.id).all()
-        return render_template('blog.html', title = "List of Blogs", posts = posts)
-    else:
+    username = request.args.get("user")
+    if blog_id:
         blog_id = int(blog_id)
         post = Blog.query.filter_by(id = blog_id).first()
-        return render_template('post.html', title = "Blog Entry", blog_title = post.title, blog_body = post.body)
+        return render_template('post.html', title = "Blog Entry", blog_title = post.title, blog_body = post.body, username = post.owner.username)
+    elif username:
+        owner = User.query.filter_by(username = username).first()
+        posts = Blog.query.filter_by(owner = owner).all()
+        return render_template('singleUser.html', title = 'Post by User', posts = posts, user = username)
+    else:
+        posts = Blog.query.order_by(Blog.id).all()
+        return render_template('blog.html', title = "List of Blogs", posts = posts)
 
 @app.route('/newpost', methods = ['POST', 'GET'])
 def newpost():

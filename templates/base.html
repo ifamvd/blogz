@@ -9,6 +9,10 @@
                 padding:0;
                 width: 100%;
             }
+            div.content {
+                width: 1000px;
+                margin: 0 auto;
+            }
             .error {
                 color: red;
                 font-style: italic;
@@ -46,6 +50,12 @@
                 font-family: 'Playfair Display', serif;
                 color: white;
                 margin: 0 30px 0 30px;
+            }
+            ul li {
+                font-family: 'Playfair Display', serif;
+                margin-left: 30px;
+                margin-right: 30px;
+                font-size: 1em;
             }
             p {
                 font-family: 'Playfair Display', serif;
@@ -105,8 +115,12 @@
             {% endfor %}
         {% endwith %}
 
-        {% block content %}
-        {% endblock %}
+        <div class="content">
+
+            {% block content %}
+            {% endblock %}
+        
+        </div>
 
     </body>
 </html>
