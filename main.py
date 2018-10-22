@@ -156,6 +156,7 @@ def blog():
     session_name = 'guest'
     if 'username' in session:
         session_name = session['username']
+    page = request.args.get('page', 1, type = int)
     blog_id = request.args.get("id")
     username = request.args.get("user")
     if blog_id:
@@ -164,10 +165,18 @@ def blog():
         return render_template('post.html', title = "Blog Entry", session = session_name, blog_title = post.title, blog_body = post.body, username = post.owner.username)
     elif username:
         owner = User.query.filter_by(username = username).first()
+        #posts = Blog.query.filter_by(owner = owner).order_by(Blog.id).paginate(page, 5, False).items
         posts = Blog.query.filter_by(owner = owner).order_by(Blog.id).all()
         return render_template('singleUser.html', title = 'Post by User', session = session_name, posts = posts, user = username)
     else:
+        #posts = Blog.query.order_by(Blog.id).paginate(page, 5, False)
         posts = Blog.query.order_by(Blog.id).all()
+        #next_url = None
+        #prev_url = None
+        #if posts.has_next:
+        #    next_url = '/blog?page=' + str(page + 1)
+        #if posts.has_prev:
+        #    prev_url = '/blog?page=' + str(page - 1)
         return render_template('blog.html', title = "List of Blogs", session = session_name, posts = posts)
 
 @app.route('/newpost', methods = ['POST', 'GET'])

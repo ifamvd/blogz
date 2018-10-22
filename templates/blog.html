@@ -6,17 +6,17 @@
 
 {% if posts|length == 0 %}
 
-<p>No posts created yet.</p>
+    <p>No posts created yet.</p>
 
 {% else %}
 
-        {% for post in posts %}
+    {% for post in posts %}
 
         <h2><a href="/blog?id={{post.id}}">{{post.title}}</a></h2>
         <p>{{post.body[:250]}} ...<a href="/blog?id={{post.id}}">(read more)</a></p>
         <p class="author">Written by <a href="/blog?user={{post.owner.username}}">{{post.owner.username}}</a></p>
 
-        {% endfor %}
+    {% endfor %}
 
 {% endif %}
 
