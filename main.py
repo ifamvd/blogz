@@ -164,7 +164,7 @@ def blog():
         return render_template('post.html', title = "Blog Entry", session = session_name, blog_title = post.title, blog_body = post.body, username = post.owner.username)
     elif username:
         owner = User.query.filter_by(username = username).first()
-        posts = Blog.query.filter_by(owner = owner).all()
+        posts = Blog.query.filter_by(owner = owner).order_by(Blog.id).all()
         return render_template('singleUser.html', title = 'Post by User', session = session_name, posts = posts, user = username)
     else:
         posts = Blog.query.order_by(Blog.id).all()
