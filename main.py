@@ -165,19 +165,25 @@ def blog():
         return render_template('post.html', title = "Blog Entry", session = session_name, blog_title = post.title, blog_body = post.body, username = post.owner.username)
     elif username:
         owner = User.query.filter_by(username = username).first()
-        #posts = Blog.query.filter_by(owner = owner).order_by(Blog.id).paginate(page, 5, False).items
-        posts = Blog.query.filter_by(owner = owner).order_by(Blog.id).all()
-        return render_template('singleUser.html', title = 'Post by User', session = session_name, posts = posts, user = username)
+        posts = Blog.query.filter_by(owner = owner).order_by(Blog.id).paginate(page, 5, False)
+        next_url = None
+        prev_url = None
+        if posts.has_next:
+            next_url = '/blog?user=' + username + '&page=' + str(page + 1)
+        if posts.has_prev:
+            prev_url = '/blog?user=' + username + '&page=' + str(page - 1)
+        return render_template('singleUser.html', title = 'Post by User', session = session_name,
+            posts = posts.items, user = username, next_url = next_url, prev_url = prev_url)
     else:
-        #posts = Blog.query.order_by(Blog.id).paginate(page, 5, False)
-        posts = Blog.query.order_by(Blog.id).all()
-        #next_url = None
-        #prev_url = None
-        #if posts.has_next:
-        #    next_url = '/blog?page=' + str(page + 1)
-        #if posts.has_prev:
-        #    prev_url = '/blog?page=' + str(page - 1)
-        return render_template('blog.html', title = "List of Blogs", session = session_name, posts = posts)
+        posts = Blog.query.order_by(Blog.id).paginate(page, 5, False)
+        next_url = None
+        prev_url = None
+        if posts.has_next:
+            next_url = '/blog?page=' + str(page + 1)
+        if posts.has_prev:
+            prev_url = '/blog?page=' + str(page - 1)
+        return render_template('blog.html', title = "List of Blogs", session = session_name,
+            posts = posts.items, next_url = next_url, prev_url = prev_url)
 
 @app.route('/newpost', methods = ['POST', 'GET'])
 def newpost():

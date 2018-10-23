@@ -20,4 +20,19 @@
 
 {% endif %}
 
+<div class="pagination">
+
+{% if prev_url %}
+
+    <a href="{{ prev_url }}">&lt;&lt; Previous Page</a>
+    
+{% endif %}
+{% if next_url %}
+
+    <a href="{{ next_url }}">Next Page &gt;&gt;</a>
+
+{% endif %}
+
+</div>
+
 {% endblock %}
